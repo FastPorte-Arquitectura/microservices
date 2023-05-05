@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="report-microservice" />
         <module name="ClientService" />
+        <module name="DriverService" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ClientService" options="-parameters" />
+      <module name="DriverService" options="-parameters" />
       <module name="report-microservice" options="-parameters" />
     </option>
   </component>
