@@ -1,5 +1,6 @@
 package com.fastporte.reportmicroservice.service.impl;
 
+import com.fastporte.reportmicroservice.ReportMicroserviceApplication;
 import com.fastporte.reportmicroservice.dto.ContractDto;
 import com.fastporte.reportmicroservice.dto.ResponseDto;
 import com.fastporte.reportmicroservice.service.ContractReportService;
@@ -10,14 +11,15 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class ContractReportServiceImpl implements ContractReportService {
 
     private final FirebaseStorageService firebaseStorageService = new FirebaseStorageServiceImpl();
-    private static final String PATH_TEMP = "src/main/java/com/fastporte/reportmicroservice/tempFiles";
 
     @Override
     public ResponseDto generateReport(ContractDto contractDto) throws JRException, FileNotFoundException {
@@ -40,11 +42,17 @@ public class ContractReportServiceImpl implements ContractReportService {
 
         try {
             jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-            String urlPdf = PATH_TEMP + File.separator + contractDto.getContractId() + ".pdf";
-            JasperExportManager.exportReportToPdfFile(jasperPrint, urlPdf);
-            String url = firebaseStorageService.uploadFile(urlPdf, contractDto.getContractId() + ".pdf");
+            File tempFile = File.createTempFile("contract_", ".pdf");
+            tempFile.deleteOnExit();
+            JasperExportManager.exportReportToPdfFile(jasperPrint, tempFile.getAbsolutePath());
+
+            String url = firebaseStorageService.uploadFile(tempFile.getAbsolutePath(), contractDto.getContractId() + ".pdf");
             ResponseDto responseDto = new ResponseDto();
             responseDto.setUrl(url);
+
+            // Delete the temporary file
+            tempFile.delete();
+
             return responseDto;
         } catch (JRException e) {
             throw new RuntimeException(e);
@@ -54,6 +62,10 @@ public class ContractReportServiceImpl implements ContractReportService {
     }
 
     private static JasperReport getJasperReport() throws FileNotFoundException, JRException {
-        return JasperCompileManager.compileReport("src/main/resources/REPORTE_CONTRATO.jrxml");
+        ClassLoader classLoader = ReportMicroserviceApplication.class.getClassLoader();
+
+        InputStream inputStream = classLoader.getResourceAsStream("REPORTE_CONTRATO.jrxml");
+        return JasperCompileManager.compileReport(inputStream);
     }
+
 }
