@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/microservice/report")
+@RequestMapping("/api/microservicee/report")
 public class ContractReportController {
 
     private final ContractReportService contractReportService;
