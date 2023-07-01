@@ -11,13 +11,23 @@
     <groupId>com.fastporte</groupId>
     <artifactId>EurekaServer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>EurekaServer</name>
     <description>EurekaServer</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>11</java.version>
         <spring-cloud.version>2021.0.7</spring-cloud.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
