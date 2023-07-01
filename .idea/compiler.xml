@@ -2,11 +2,13 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="report-microservice" />
+        <module name="ServiceService" />
         <module name="ClientService" />
         <module name="DriverService" />
       </profile>
@@ -16,6 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ClientService" options="-parameters" />
       <module name="DriverService" options="-parameters" />
+      <module name="ServiceService" options="-parameters" />
       <module name="report-microservice" options="-parameters" />
     </option>
   </component>
